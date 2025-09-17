@@ -28,7 +28,7 @@ func (f *InputFetcher) FetchInput(year int, day int, sessionCookie string) (stri
 	req.AddCookie(&http.Cookie{Name: "session", Value: sessionCookie})
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", errors.New(fmt.Sprintf("Error fetching the input: %v\n", err))
+		return "", errors.New(fmt.Sprintf("Error fetching the Input: %v\n", err))
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
@@ -43,7 +43,7 @@ func (f *InputFetcher) FetchInput(year int, day int, sessionCookie string) (stri
 	}
 	title := doc.Find("title").First().Text()
 	if title == "500 Internal Server Error" {
-		return "", errors.New(fmt.Sprintf("Could not find the input data. Check your session cookie.\nResponse body:\n%s", doc.Text()))
+		return "", errors.New(fmt.Sprintf("Could not find the Input data. Check your session cookie.\nResponse body:\n%s", doc.Text()))
 	}
 
 	return doc.Text(), nil
