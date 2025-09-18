@@ -15,11 +15,11 @@ type IntParser interface {
 	GetInts(sep string) [][]int
 }
 
-type ColumnIntParser struct {
+type BaseParser struct {
 	Input string
 }
 
-func (p *ColumnIntParser) GetLines() []string {
+func (p *BaseParser) GetLines() []string {
 	var lines []string
 
 	reader := strings.NewReader(p.Input)
@@ -30,6 +30,10 @@ func (p *ColumnIntParser) GetLines() []string {
 	}
 
 	return lines
+}
+
+type ColumnIntParser struct {
+	BaseParser
 }
 
 func (p *ColumnIntParser) GetInts(sep string) [][]int {
@@ -48,6 +52,29 @@ func (p *ColumnIntParser) GetInts(sep string) [][]int {
 			}
 			result[i] = append(result[i], number)
 		}
+	}
+	return result
+}
+
+type RowIntParser struct {
+	BaseParser
+}
+
+func (p *RowIntParser) GetInts(sep string) [][]int {
+	var result [][]int
+
+	lines := p.GetLines()
+	for _, line := range lines {
+		tokens := strings.Split(line, sep)
+		row := make([]int, len(tokens), len(tokens))
+		for i, token := range tokens {
+			number, err := strconv.Atoi(token)
+			if err != nil {
+				panic(err)
+			}
+			row[i] = number
+		}
+		result = append(result, row)
 	}
 
 	return result
