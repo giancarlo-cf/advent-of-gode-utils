@@ -37,6 +37,11 @@ func (f *InputFetcher) FetchInput(year int, day int, sessionCookie string) (stri
 		}
 	}(resp.Body)
 
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", errors.New(fmt.Sprintf("Error reading response body: %v\n", err))
+	}
+
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
 		return "", errors.New(fmt.Sprintf("Error parsing the fetch response: %v\n", err))
@@ -46,5 +51,5 @@ func (f *InputFetcher) FetchInput(year int, day int, sessionCookie string) (stri
 		return "", errors.New(fmt.Sprintf("Could not find the Input data. Check your session cookie.\nResponse body:\n%s", doc.Text()))
 	}
 
-	return doc.Text(), nil
+	return string(bodyBytes), nil
 }
