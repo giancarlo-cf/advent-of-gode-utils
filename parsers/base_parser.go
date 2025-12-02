@@ -21,3 +21,7 @@ func (p *BaseParser) GetLines() []string {
 
 	return lines
 }
+
+func (p *BaseParser) GetLinesBySep(sep string) []string {
+	return strings.Split(p.Input, sep)
+}

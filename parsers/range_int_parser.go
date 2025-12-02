@@ -5,19 +5,19 @@ import (
 	"strings"
 )
 
-type RowIntParser struct {
+type RangeIntParser struct {
 	BaseParser
 }
 
-func (p *RowIntParser) GetInts(sep string) [][]int {
+func (p *RangeIntParser) GetInts(sep string) [][]int {
 	var result [][]int
 
-	lines := p.GetLines()
+	lines := p.GetLinesBySep(sep)
 	for _, line := range lines {
-		tokens := strings.Split(line, sep)
+		tokens := strings.Split(line, "-")
 		row := make([]int, len(tokens))
 		for i, token := range tokens {
-			number, err := strconv.Atoi(token)
+			number, err := strconv.Atoi(strings.TrimRight(token, "\n"))
 			if err != nil {
 				panic(err)
 			}

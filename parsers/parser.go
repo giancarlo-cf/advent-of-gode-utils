@@ -2,6 +2,7 @@ package parsers
 
 type Parser interface {
 	GetLines() []string
+	GetLinesBySep(sep string) []string
 }
 
 type IntParser interface {
